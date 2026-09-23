@@ -1,26 +1,24 @@
 @import "tailwindcss";
-
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
-}
+:root { --background: #f7f5ef; --foreground: #242c29; }
+@theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono); }
+body { margin: 0; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
+.collection { width: min(880px, calc(100% - 40px)); margin: 0 auto; padding: 88px 0 32px; }
+.eyebrow { font-size: 12px; font-weight: 700; letter-spacing: .22em; color: #527264; margin-bottom: 24px; }
+h1 { font-size: clamp(36px, 6vw, 60px); line-height: 1.08; letter-spacing: -.045em; font-weight: 700; max-width: 700px; }
+h1 span { color: #b9613d; }
+.intro { color: #626c66; font-size: 17px; line-height: 1.7; margin: 20px 0 56px; }
+.count { color: #647068; font-size: 13px; margin-bottom: 16px; }
+.movie-list { list-style: none; padding: 0; margin: 0; border-top: 1px solid #d7ddd5; }
+.movie { display: flex; align-items: center; gap: 28px; padding: 30px 8px; border-bottom: 1px solid #d7ddd5; }
+.number { font-size: 14px; color: #77837b; font-variant-numeric: tabular-nums; }
+.movie-info { flex: 1; min-width: 0; }
+.genre { color: #527264; font-size: 12px; margin-bottom: 8px; }
+h2 { font-size: 24px; font-weight: 600; line-height: 1.3; }
+.rating { white-space: nowrap; font-size: 22px; font-weight: 600; }
+.rating span { color: #ad643b; font-size: 18px; }
+.rating small { font-size: 13px; color: #707b74; font-weight: 400; margin-left: 3px; }
+.notice { padding: 28px; border: 1px solid #d7ddd5; border-radius: 12px; line-height: 1.8; }
+.notice p { margin: 12px 0; }
+.notice a { text-decoration: underline; }
+footer { margin-top: 64px; font-size: 12px; color: #6a756e; }
+@media (max-width: 540px) { .collection { padding-top: 48px; } .movie { gap: 16px; padding: 24px 0; } h2 { font-size: 20px; } .rating { font-size: 18px; } }
