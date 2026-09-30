@@ -1,8 +1,14 @@
+import Link from "next/link";
+import { redirect } from "next/navigation";
+import { getAccount, isComplete } from "@/lib/profile";
+import { Navigation } from "@/components/navigation";
 import { connection } from "next/server";
 import { getMovies, type Movie } from "@/lib/movies";
 
 export default async function Home() {
   await connection();
+  const { user, profile } = await getAccount();
+  if (user && !isComplete(profile)) redirect("/profile");
   let movies: Movie[] = [];
   let failed = false;
   try { movies = await getMovies(); }
@@ -10,6 +16,7 @@ export default async function Home() {
 
   return (
     <main className="collection">
+      <Navigation signedIn={Boolean(user)} />
       <header>
         <p className="eyebrow">THE MOVIE SHELF</p>
         <h1>My favorite movies<span>.</span></h1>
@@ -38,6 +45,12 @@ export default async function Home() {
             </ul>
           </>
         )}
+      </section>
+      <section className="panel gated-panel" aria-label="Members’ corner">
+        <p className="genre">{user ? "YOUR MEMBERSHIP" : "A LITTLE EXTRA, JUST FOR MEMBERS"}</p>
+        <h2>{user ? `Welcome back, ${profile?.first_name}.` : "Make it a movie night."}</h2>
+        <p>{user ? "Your members’ corner is ready, with a double feature and a conversation starter." : "Sign in to discover our members’ corner and make this shelf your own."}</p>
+        <Link className="button" href={user ? "/members" : "/login"}>{user ? "Visit members’ corner →" : "Sign in to explore →"}</Link>
       </section>
       <footer>Good stories stay with you.</footer>
     </main>
