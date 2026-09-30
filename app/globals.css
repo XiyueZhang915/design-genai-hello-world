@@ -21,6 +21,8 @@ h2 { font-size: 24px; font-weight: 600; line-height: 1.3; }
 .notice p { margin: 12px 0; }
 .notice a { text-decoration: underline; }
 footer { margin-top: 64px; font-size: 12px; color: #6a756e; }
+.site-footer { width:min(880px, calc(100% - 40px)); margin:24px auto 32px; }
+.site-footer a, .panel a { text-decoration:underline; }
 @media (max-width: 540px) { .collection { padding-top: 48px; } .movie { gap: 16px; padding: 24px 0; } h2 { font-size: 20px; } .rating { font-size: 18px; } }
 .navigation { display:flex; align-items:center; justify-content:space-between; gap:24px; margin-bottom:64px; padding-bottom:24px; border-bottom:1px solid #d7ddd5; }
 .brand { font-size:11px; font-weight:700; letter-spacing:.16em; color:#527264; }
