@@ -1,5 +1,5 @@
 @import "tailwindcss";
-:root { --background: #f7f5ef; --foreground: #242c29; }
+:root { --background: #f7f5ef; --foreground: #242c29; --font-geist-sans: Arial, Helvetica, sans-serif; --font-geist-mono: monospace; }
 @theme inline { --color-background: var(--background); --color-foreground: var(--foreground); --font-sans: var(--font-geist-sans); --font-mono: var(--font-geist-mono); }
 body { margin: 0; background: var(--background); color: var(--foreground); font-family: Arial, Helvetica, sans-serif; }
 .collection { width: min(880px, calc(100% - 40px)); margin: 0 auto; padding: 88px 0 32px; }
@@ -53,3 +53,55 @@ footer { margin-top: 64px; font-size: 12px; color: #6a756e; }
 .panel .field-help { font-size:12px; margin-top:-10px; }
 :focus-visible { outline:3px solid #b9613d; outline-offset:3px; }
 @media(max-width:540px) { .navigation { align-items:flex-start; margin-bottom:40px; gap:12px; } .nav-links { flex-wrap:wrap; justify-content:flex-end; gap:12px; font-size:12px; } .panel { padding:24px; } .name-fields { grid-template-columns:1fr; gap:0; } .profile-heading { gap:16px; } }
+
+/* NYC caption community */
+html { scroll-behavior:smooth; }
+.nyc-home { width:min(980px, calc(100% - 40px)); padding-top:40px; }
+.nyc-home .navigation { margin-bottom:58px; }
+.city-hero h1 { font-size:clamp(46px, 7vw, 78px); max-width:850px; }
+.city-hero .intro { max-width:600px; margin-bottom:26px; }
+.hero-actions, .recap-actions { display:flex; gap:12px; align-items:center; flex-wrap:wrap; }
+.outline-button { display:inline-flex; align-items:center; justify-content:center; padding:12px 18px; border:1px solid #b8c7bc; border-radius:8px; font-size:14px; font-weight:600; cursor:pointer; }
+.outline-button:hover { background:#e8eee5; }
+.city-strip { display:flex; flex-wrap:wrap; gap:18px 30px; padding:22px 0; margin-top:45px; border-top:1px solid #d7ddd5; border-bottom:1px solid #d7ddd5; font-size:10px; letter-spacing:.1em; color:#527264; }
+.rating-section { margin-top:56px; scroll-margin-top:24px; }
+.rating-section .eyebrow { margin-bottom:12px; }
+.rating-section > h2 { font-size:32px; letter-spacing:-.025em; }
+.section-intro { color:#626c66; margin:12px 0 28px; line-height:1.7; }
+.rating-deck { max-width:720px; }
+.round-header { display:flex; justify-content:space-between; gap:16px; font-size:11px; letter-spacing:.08em; color:#527264; }
+progress { display:block; width:100%; height:7px; margin:12px 0 24px; border:0; border-radius:10px; overflow:hidden; accent-color:#365747; background:#dce3d8; }
+progress::-webkit-progress-bar { background:#dce3d8; }
+progress::-webkit-progress-value { background:#365747; }
+progress::-moz-progress-bar { background:#365747; }
+.caption-card { padding:32px; background:#fffdf8; border:1px solid #d7ddd5; border-radius:16px; overflow-wrap:anywhere; }
+.card-top { display:flex; justify-content:space-between; flex-wrap:wrap; gap:8px; margin-bottom:22px; }
+.tag, .ai-label { font-size:10px; font-weight:700; letter-spacing:.1em; text-transform:uppercase; color:#527264; }
+.ai-label { color:#8b654e; }
+.caption-card h3 { font-size:23px; font-weight:600; line-height:1.3; }
+.moment { color:#626c66; font-size:14px; line-height:1.7; margin:12px 0; }
+.caption-card blockquote { font-size:clamp(22px, 3vw, 30px); font-weight:600; line-height:1.45; letter-spacing:-.025em; margin:26px 0 32px; padding-left:20px; border-left:3px solid #b9613d; }
+.rating-question { font-size:13px; font-weight:600; margin-bottom:12px; }
+.vote-buttons { display:flex; flex-wrap:wrap; gap:12px; }
+.vote-button { background:#edf1e8; border:1px solid #b8c7bc; padding:14px 20px; border-radius:8px; cursor:pointer; font-size:14px; font-weight:600; }
+.vote-button:hover:not(:disabled) { background:#dce7d6; border-color:#365747; }
+.vote-button:disabled { opacity:.65; cursor:default; }
+.vote-button.selected { background:#365747; color:white; opacity:1; border-color:#365747; }
+.vote-feedback { font-size:12px; color:#626c66; line-height:1.7; margin-top:16px; }
+.next-caption { margin-top:20px; }
+.recap-favorite { margin:24px 0; padding:20px; background:#edf1e8; border-radius:10px; line-height:1.7; }
+.preview-grid { display:grid; gap:20px; }
+.sign-in-invitation { margin-top:28px; display:flex; flex-wrap:wrap; align-items:center; justify-content:space-between; gap:20px; color:#626c66; }
+.moment-form { margin-top:28px; }
+.moment-form fieldset { border:0; padding:0; margin:0; min-width:0; }
+.moment-form label { display:block; font-size:14px; font-weight:600; margin-bottom:24px; }
+.moment-form input, .moment-form textarea, .moment-form select { display:block; width:100%; padding:13px; margin-top:9px; border:1px solid #b8c7bc; border-radius:8px; background:white; font-size:16px; font-weight:400; color:#242c29; }
+.moment-form textarea { resize:vertical; }
+.moment-form fieldset:disabled { opacity:.65; }
+.moment-form .field-help { font-size:12px; color:#626c66; line-height:1.8; margin:16px 0 24px; }
+.generated { margin-top:28px; }
+.notebook-list { display:grid; gap:24px; margin-top:32px; }
+.saved-prompt { white-space:pre-wrap; overflow-wrap:anywhere; font-size:12px; line-height:1.8; margin-top:16px; color:#626c66; }
+summary { cursor:pointer; font-size:13px; color:#527264; }
+@media(max-width:540px) { .nyc-home { padding-top:26px; } .nyc-home .navigation { margin-bottom:36px; } .brand { max-width:110px; line-height:1.7; } .caption-card { padding:24px; } .city-strip { gap:14px 20px; } .vote-buttons > button { flex:1; padding:14px 10px; } .round-header { letter-spacing:0; } }
+@media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }

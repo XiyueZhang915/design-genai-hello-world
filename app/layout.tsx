@@ -1,28 +1,17 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Link from "next/link";
 
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
-
 export const metadata: Metadata = {
-  title: "My Favorite Movies",
-  description: "A personal collection of favorite movies.",
+  title: "NYC, According to AI",
+  description: "Turn your New York moments into AI captions. Rate the punchlines and find your kind of city humor.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className="h-full antialiased"
     >
       <body className="min-h-full flex flex-col">{children}<footer className="site-footer"><Link href="/privacy">Privacy</Link> · <Link href="/terms">Terms</Link></footer></body>
     </html>

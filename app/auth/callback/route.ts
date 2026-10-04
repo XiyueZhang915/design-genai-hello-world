@@ -12,7 +12,7 @@ export async function GET(request: Request) {
     if (!error && data.user) {
       const { data: profile, error: profileError } = await supabase.from("profiles")
         .select("id,first_name,last_name,avatar_path").eq("id", data.user.id).maybeSingle();
-      destination = profileError || !isComplete(profile) ? "/profile" : "/members";
+      destination = profileError || !isComplete(profile) ? "/profile" : "/";
     }
   }
   const response = NextResponse.redirect(new URL(destination, url.origin));

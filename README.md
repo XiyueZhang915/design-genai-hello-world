@@ -1,4 +1,41 @@
-# My Favorite Movies
+# NYC, According to AI — Assignment 4
+
+A NYC humor community for a Columbia student exploring the city. A signed-in user supplies a place and an experience, Gemini creates a caption, and the app saves it for others to rate. Votes rate **the AI caption’s humor**, not the venue.
+
+## Finish setup
+
+1. In the **existing Supabase project**, run `supabase/assignment4.sql` in SQL Editor after the Assignment 3 migration. It creates private `generations`, public `captions`, and private `caption_votes`, with RLS and narrowly scoped insert grants. It also enables RLS on every public application table. Tables without policies deny client access. Existing profile and avatar policies remain in effect.
+2. Get a Gemini API key from https://aistudio.google.com/apikey. Add `GEMINI_API_KEY=your_key` to `.env.local`. Never commit it or prefix it with `NEXT_PUBLIC_`. Leave the existing Supabase URL and anon key in place. `GEMINI_MODEL=gemini-flash-latest` is optional; override it with a model supported by your API project. Model availability and quotas depend on Google. The integration uses the documented [generateContent REST API](https://ai.google.dev/api/generate-content).
+3. Restart `npm run dev` and open http://localhost:3000. Use a supported model/key to verify a real generation; no example captions are passed off as AI output.
+4. Add the same Gemini variables to Vercel’s target environment before deploying. Disable **Settings → Deployment Protection → Vercel Authentication** for the submission as the assignment requires. Confirm the final deployment works in incognito. Existing Google OAuth/Supabase callback allowlists still need the exact submitted deployment origin (see Assignment 3 below).
+
+## Current routes and behavior
+
+- `/`: public latest-caption preview; signed-in members rate rounds of up to five captions from the latest 60. Already-rated captions are skipped. Only confirmed database writes advance progress; each round ends with a personal recap.
+- `/create`: protected generation form. Place, experience, and caption are published together; full prompts remain private. Disabled until both the migration and server AI key are available.
+- `/members`: protected notebook of the latest 30 generation attempts with model and exact prompt. Failed attempts remain in history and count toward request limits.
+- `/profile`, `/login`, `/auth/callback`: existing Google sign-in and onboarding.
+
+The server verifies the authenticated user in **each mutation** and never takes user IDs from the form. The database enforces one immutable vote per user/caption, caption-to-generation ownership, server-owned IDs/timestamps, and at most 10 generation attempts per rolling 24 hours, at least 30 seconds apart. RLS restricts prompt and vote reads to their owner. No service-role key is used. One caption is allowed per generation request; generations are saved before calling AI, so failed attempts can be inspected. AI errors, blocked responses, truncation, and save failures never become published placeholder content. Input stories and saved prompts go to Google Gemini for generation; privacy text explains this.
+
+## Validation and PM feedback
+
+Run `npm run lint`, `npm test`, and `npm run build`. The tests use in-memory PostgreSQL with non-owner roles to exercise the actual migration twice, RLS, foreign keys, uniqueness, immutability, and quota limits. They never contact or change your Supabase database. AI tests mock provider responses; they do not prove a live key works.
+
+After configuration, check with real accounts:
+
+1. Signed out: view public captions; direct `/create` and `/members` visits redirect to login; generation and voting mutations reject unauthenticated requests.
+2. Signed in: publish a real caption and inspect its saved prompt in My captions. Reload to confirm persistence.
+3. Rate captions in a round, confirm success feedback, then reload. Saved votes should remain and not appear again. Confirm one database row per user/caption.
+4. With a second account, confirm it can vote independently but cannot read the first user’s prompt or votes, create content under their account, or modify their records.
+5. Force an invalid AI key/quota response or a failed save: errors must be clear, the form becomes usable again, and no fake caption is published.
+6. Try mobile and keyboard navigation. Ask the PM whether the voting target, publication visibility, loading feedback, and round recap are understandable. Record feedback and iterate before submission.
+
+Intentional scope: recognizable NYC categories and personal experiences give the AI specific material; short rating rounds and a recap reward participation. The app avoids external GIF failures by using text captions. It does not invent venue details, claim verified recommendations, or add unrelated maps, star reviews, points, or leaderboards.
+
+---
+
+# Earlier assignments: My Favorite Movies
 
 Assignment 2 extends the Assignment 1 Next.js app with a movie list read from Supabase.
 
