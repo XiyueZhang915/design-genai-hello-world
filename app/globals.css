@@ -105,3 +105,11 @@ progress::-moz-progress-bar { background:#365747; }
 summary { cursor:pointer; font-size:13px; color:#527264; }
 @media(max-width:540px) { .nyc-home { padding-top:26px; } .nyc-home .navigation { margin-bottom:36px; } .brand { max-width:110px; line-height:1.7; } .caption-card { padding:24px; } .city-strip { gap:14px 20px; } .vote-buttons > button { flex:1; padding:14px 10px; } .round-header { letter-spacing:0; } }
 @media(prefers-reduced-motion:reduce) { html { scroll-behavior:auto; } }
+
+.category-button { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:20px; border:1px solid #b9c7bf; border-radius:14px; color:#345748; text-decoration:none; font-size:14px; letter-spacing:0; background:#fffdf7; }
+.city-strip { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:14px; }
+.category-button:hover, [aria-current="page"].category-button, .community-filters [aria-current="page"] { background:#345748; color:white; }
+.category-button:focus-visible { outline:3px solid #a95436; outline-offset:3px; }
+.community-filters, .community-pagination { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin:24px 0; }
+#community { scroll-margin-top:24px; }
+@media(max-width:540px) { .category-button { padding:16px 12px; font-size:13px; } .community-filters .outline-button { padding:10px 12px; } }

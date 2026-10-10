@@ -38,5 +38,5 @@ export async function saveProfile(_previous: ProfileState, formData: FormData): 
   }
   if (newPath && profile?.avatar_path?.startsWith(`${user.id}/`)) await supabase.storage.from("avatars").remove([profile.avatar_path]);
   revalidatePath("/", "layout");
-  redirect("/profile?saved=1");
+  redirect("/");
 }

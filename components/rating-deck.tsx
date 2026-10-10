@@ -3,13 +3,13 @@
 import Link from "next/link";
 import { useActionState, useCallback, useEffect, useState } from "react";
 import { voteCaption } from "@/app/create/actions";
-import { type Caption, type ActionState } from "@/lib/humor";
+import { categoryLabels, type Caption, type ActionState } from "@/lib/humor";
 
 function RatingCard({ caption, onSaved, onNext, last }: { caption: Caption; onSaved: (id: string, value: number) => void; onNext: () => void; last: boolean }) {
   const [state, action, pending] = useActionState<ActionState, FormData>(voteCaption.bind(null, caption.id), {});
   useEffect(() => { if (state.saved && state.value) onSaved(caption.id, state.value); }, [state.saved, state.value, caption.id, onSaved]);
   return <article className="caption-card">
-    <div className="card-top"><span className="tag">{caption.category}</span><span className="ai-label">AI GENERATED</span></div>
+    <div className="card-top"><span className="tag">{categoryLabels[caption.category]}</span><span className="ai-label">AI GENERATED</span></div>
     <h3>{caption.place}</h3><p className="moment">{caption.experience}</p><blockquote>{caption.caption}</blockquote>
     <p className="rating-question">Did the caption land?</p>
     <form action={action} className="vote-buttons">

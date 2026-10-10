@@ -1,4 +1,10 @@
 export const categories = ["Coffee shops", "Restaurants", "Landmarks", "Around campus"] as const;
+export const categoryLabels: Record<(typeof categories)[number], string> = {
+  "Coffee shops": "Coffee & study",
+  "Restaurants": "Food & hangouts",
+  "Landmarks": "City adventures",
+  "Around campus": "Campus & dorm life",
+};
 export type Category = typeof categories[number];
 export type Caption = { id: string; place: string; category: Category; experience: string; caption: string; created_at: string };
 export type ActionState = { error?: string; caption?: Caption; saved?: boolean; value?: number };
