@@ -1,7 +1,7 @@
 "use server";
 
 import { getAccount, isComplete } from "@/lib/profile";
-import { parseMoment, makePrompt, generateCaption, type ActionState } from "@/lib/humor";
+import { parseMoment, makePrompt, generateCaption, defaultGeminiModel, type ActionState } from "@/lib/humor";
 import { revalidatePath } from "next/cache";
 
 export async function createCaption(_previous: ActionState, form: FormData): Promise<ActionState> {
@@ -12,7 +12,7 @@ export async function createCaption(_previous: ActionState, form: FormData): Pro
   try { moment = parseMoment(form); }
   catch (error) { return { error: (error as Error).message }; }
   const key = process.env.GEMINI_API_KEY;
-  const model = process.env.GEMINI_MODEL || "gemini-flash-latest";
+  const model = process.env.GEMINI_MODEL || defaultGeminiModel;
   if (!key) return { error: "AI generation isn’t available yet. Please come back soon." };
   const prompt = makePrompt(moment);
   // Reserve a request before calling AI. Database limits also apply to concurrent requests.

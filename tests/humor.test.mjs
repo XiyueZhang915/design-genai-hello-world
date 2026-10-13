@@ -63,3 +63,26 @@ test("configuration failures are not retried and get a specific message", async 
   await assert.rejects(generateCaption("prompt", "secret", "model", async () => { calls++; return new Response("Private provider detail", { status: 403 }); }), /key and model settings/);
   assert.equal(calls, 1);
 });
+
+
+test("retries network and timeout failures with a fresh abort signal", async () => {
+  for (const name of ["TimeoutError", "TypeError"]) {
+    const signals = [];
+    const mock = async (_url, options) => {
+      signals.push(options.signal);
+      if (signals.length === 1) { const error = new Error("private detail"); error.name = name; throw error; }
+      return Response.json({ candidates: [{ finishReason: "STOP", content: { parts: [{ text: "Subway sightseeing. Destination: lunch." }] } }] });
+    };
+    assert.equal(await generateCaption("prompt", "secret", "model", mock), "Subway sightseeing. Destination: lunch.");
+    assert.equal(signals.length, 2);
+    assert.notEqual(signals[0], signals[1]);
+  }
+});
+
+test("persistent timeouts stop after two attempts with a safe error", async () => {
+  let calls = 0;
+  await assert.rejects(generateCaption("prompt", "secret", "model", async () => {
+    calls++; throw new DOMException("secret provider detail", "TimeoutError");
+  }), /taking too long/);
+  assert.equal(calls, 2);
+});
