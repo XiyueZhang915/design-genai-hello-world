@@ -2,16 +2,11 @@
 
 import { useActionState, useState } from "react";
 import { saveProfile } from "@/app/profile/actions";
-import type { Profile } from "@/lib/profile";
 
-export function ProfileForm({ profile, email }: { profile: Profile | null; email: string }) {
+export function ProfileForm({ email }: { email: string }) {
   const [state, action, pending] = useActionState(saveProfile, {});
   const [photoError, setPhotoError] = useState("");
   return <form action={action} className="profile-form">
-    <div className="name-fields">
-      <label>First name<input name="first_name" autoComplete="given-name" defaultValue={profile?.first_name ?? ""} maxLength={80} required /></label>
-      <label>Last name<input name="last_name" autoComplete="family-name" defaultValue={profile?.last_name ?? ""} maxLength={80} required /></label>
-    </div>
     <label>Email<input value={email} readOnly type="email" aria-describedby="email-help" /></label>
     <p className="field-help" id="email-help">Connected to your Google account.</p>
     <label>Profile photo<input name="photo" type="file" accept="image/jpeg,image/png,image/webp" aria-describedby="photo-help" onChange={(event) => {

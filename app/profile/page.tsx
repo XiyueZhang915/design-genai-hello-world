@@ -10,15 +10,14 @@ export default async function ProfilePage({ searchParams }: { searchParams: Prom
   const avatarUrl = profile?.avatar_path ? supabase.storage.from("avatars").getPublicUrl(profile.avatar_path).data.publicUrl : null;
   return <main className="collection"><Navigation signedIn />
     <p className="eyebrow">A FACE BEHIND THE FAVORITES</p><h1>Your profile<span>.</span></h1>
-    <p className="intro">Make yourself at home. You can update your details anytime.</p>
-    {!isComplete(profile) && <p className="message" role="status">Welcome! Add your first and last name to finish setting up your profile.</p>}
+    <p className="intro">You’re ready to go. A profile photo is optional.</p>
     {saved === "1" && <p className="message success" role="status">Your profile has been saved. <Link href="/members">Visit your captions →</Link></p>}
     <section className="panel" aria-label="Edit profile">
       <div className="profile-heading">
         {avatarUrl ? <Image className="avatar" src={avatarUrl} alt="Your profile photo" width={88} height={88} unoptimized /> : <div className="avatar avatar-placeholder" aria-label="No profile photo">{profile?.first_name?.slice(0, 1).toUpperCase() || "?"}</div>}
         <div><h2>{isComplete(profile) ? `${profile?.first_name} ${profile?.last_name}` : "Nice to meet you."}</h2><p>Your personal spot in the city.</p></div>
       </div>
-      <ProfileForm profile={profile} email={user.email ?? ""} />
+      <ProfileForm email={user.email ?? ""} />
     </section>
   </main>;
 }

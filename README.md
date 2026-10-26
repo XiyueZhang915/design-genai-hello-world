@@ -1,4 +1,10 @@
-# NYC, According to AI — Assignment 4
+## Current access behavior (October 26, 2026)
+
+Browsing and submitting ratings require no login. Apply `supabase/guest-ratings.sql` after the existing Assignment 7 migrations. Guest votes use a high-entropy HTTP-only cookie, store only its SHA-256 digest in the database, and allow one immutable vote per caption/browser identity plus up to 60 new votes per hour. Clearing cookies or using another browser creates a new identity; this is not one-person-one-vote enforcement. Anonymous callers cannot read rating rows, profiles or generation history; narrow RPCs submit ratings and retrieve only receipts for the supplied secret identity. Existing signed-in ratings and admin statistics use the same table.
+
+Google login is still used for caption creation, private history and optional avatar changes. It returns directly home without requesting first/last names. No name-completeness gates remain. The separate administrator app still requires Google and `profiles.is_superadmin`.
+
+# NYC, According to AI — public captions and guest ratings
 
 A NYC humor community for a Columbia student exploring the city. A signed-in user supplies a place and an experience, Gemini creates a caption, and the app saves it for others to rate. Votes rate **the AI caption’s humor**, not the venue.
 
@@ -11,10 +17,10 @@ A NYC humor community for a Columbia student exploring the city. A signed-in use
 
 ## Current routes and behavior
 
-- `/`: public latest-caption preview; signed-in members rate rounds of up to five captions from the latest 60. Already-rated captions are skipped. Only confirmed database writes advance progress; each round ends with a personal recap.
+- `/`: public latest-caption preview; all visitors rate rounds of up to five captions from the latest 60. Already-rated captions are skipped. Only confirmed database writes advance progress; each round ends with a personal recap.
 - `/create`: protected generation form. Place, experience, and caption are published together; full prompts remain private. Disabled until both the migration and server AI key are available.
 - `/members`: protected notebook of the latest 30 generation attempts with model and exact prompt. Failed attempts remain in history and count toward request limits.
-- `/profile`, `/login`, `/auth/callback`: existing Google sign-in and onboarding.
+- `/profile`, `/login`, `/auth/callback`: Google sign-in with a direct return to home; optional profile photo.
 
 The server verifies the authenticated user in **each mutation** and never takes user IDs from the form. The database enforces one immutable vote per user/caption, caption-to-generation ownership, server-owned IDs/timestamps, and at most 10 generation attempts per rolling 24 hours, at least 30 seconds apart. RLS restricts prompt and vote reads to their owner. No service-role key is used. One caption is allowed per generation request; generations are saved before calling AI, so failed attempts can be inspected. AI errors, blocked responses, truncation, and save failures never become published placeholder content. Input stories and saved prompts go to Google Gemini for generation; privacy text explains this.
 
@@ -58,7 +64,7 @@ Use the existing GitHub-connected Vercel project. Set `SUPABASE_URL` and `SUPABA
 
 For assignment submission, use the unique deployment URL associated with the submitted commit. Verify that it shows the movie list without requiring a Vercel login in an incognito window.
 
-## Assignment 3: Google login and profiles
+## Assignment 3: Google login and profiles (historical setup; name onboarding removed)
 
 Use the existing Supabase and Vercel projects. The app uses the same `SUPABASE_URL` and `SUPABASE_ANON_KEY` environment variables as assignment 2. No service-role key or Google client secret belongs in the app.
 

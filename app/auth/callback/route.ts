@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
-import { isComplete } from "@/lib/profile";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
@@ -10,9 +9,7 @@ export async function GET(request: Request) {
   if (code) {
     const { data, error } = await supabase.auth.exchangeCodeForSession(code);
     if (!error && data.user) {
-      const { data: profile, error: profileError } = await supabase.from("profiles")
-        .select("id,first_name,last_name,avatar_path").eq("id", data.user.id).maybeSingle();
-      destination = profileError || !isComplete(profile) ? "/profile" : "/";
+      destination = "/";
     }
   }
   const response = NextResponse.redirect(new URL(destination, url.origin));

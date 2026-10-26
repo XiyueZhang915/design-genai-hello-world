@@ -7,12 +7,6 @@ import { redirect } from "next/navigation";
 export type ProfileState = { error?: string };
 export async function saveProfile(_previous: ProfileState, formData: FormData): Promise<ProfileState> {
   const { supabase, user, profile } = await requireAccount();
-  const firstName = formData.get("first_name");
-  const lastName = formData.get("last_name");
-  if (typeof firstName !== "string" || typeof lastName !== "string" || !firstName.trim() || !lastName.trim()) {
-    return { error: "Please add both your first and last name." };
-  }
-  if (firstName.trim().length > 80 || lastName.trim().length > 80) return { error: "Each name can be up to 80 characters." };
   const photo = formData.get("photo");
   let avatarPath = profile?.avatar_path ?? null;
   let newPath: string | null = null;
@@ -30,7 +24,7 @@ export async function saveProfile(_previous: ProfileState, formData: FormData): 
     avatarPath = newPath;
   }
   const { error } = await supabase.from("profiles").upsert({
-    id: user.id, first_name: firstName.trim(), last_name: lastName.trim(), avatar_path: avatarPath,
+    id: user.id, avatar_path: avatarPath,
   });
   if (error) {
     if (newPath) await supabase.storage.from("avatars").remove([newPath]);

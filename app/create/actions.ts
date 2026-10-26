@@ -1,13 +1,13 @@
 "use server";
 
-import { getAccount, isComplete } from "@/lib/profile";
+import { getAccount } from "@/lib/profile";
 import { parseMoment, makePrompt, generateCaption, defaultGeminiModel, type ActionState } from "@/lib/humor";
+import { guestRatingKey } from "@/lib/guest-ratings";
 import { revalidatePath } from "next/cache";
 
 export async function createCaption(_previous: ActionState, form: FormData): Promise<ActionState> {
-  const { supabase, user, profile } = await getAccount();
+  const { supabase, user } = await getAccount();
   if (!user) return { error: "Sign in to generate a caption." };
-  if (!isComplete(profile)) return { error: "Complete your profile before generating." };
   let moment;
   try { moment = parseMoment(form); }
   catch (error) { return { error: (error as Error).message }; }
@@ -36,11 +36,16 @@ export async function createCaption(_previous: ActionState, form: FormData): Pro
 }
 
 export async function voteCaption(captionId: string, _previous: ActionState, form: FormData): Promise<ActionState> {
-  const { supabase, user, profile } = await getAccount();
-  if (!user) return { error: "Sign in to rate captions." };
-  if (!isComplete(profile)) return { error: "Complete your profile before rating." };
+  const { supabase, user } = await getAccount();
   const value = Number(form.get("value"));
   if (!/^[0-9a-f-]{36}$/i.test(captionId) || ![1, -1].includes(value)) return { error: "Choose a valid caption and rating." };
+  if (!user) {
+    const key = await guestRatingKey(true);
+    const { data, error } = await supabase.rpc("submit_guest_rating", { p_key: key, p_caption: captionId, p_value: value });
+    if (error) return { error: error.message.includes("rating_limit") ? "You’ve rated a lot! Please try again in an hour." : "Your rating wasn’t saved. Please try again." };
+    revalidatePath("/");
+    return { saved: true, value: Number(data) };
+  }
   const { error } = await supabase.from("caption_votes").insert({ caption_id: captionId, user_id: user.id, value });
   if (error?.code === "23505") {
     const { data, error: readError } = await supabase.from("caption_votes").select("value").eq("caption_id", captionId).eq("user_id", user.id).single();

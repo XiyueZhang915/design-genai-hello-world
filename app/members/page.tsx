@@ -1,15 +1,13 @@
 import Link from "next/link";
-import { redirect } from "next/navigation";
-import { requireAccount, isComplete } from "@/lib/profile";
+import { requireAccount } from "@/lib/profile";
 import { Navigation } from "@/components/navigation";
 import { publishedCaption } from "@/lib/generation-history";
 
 export default async function Members() {
   const { supabase, user, profile } = await requireAccount();
-  if (!isComplete(profile)) redirect("/profile");
   const { data: generations, error } = await supabase.from("generations").select("id,prompt,model,created_at,captions(id,place,caption)").eq("user_id", user.id).order("created_at", { ascending: false }).limit(30);
   return <main className="collection"><Navigation signedIn /><p className="eyebrow">YOUR NYC NOTEBOOK</p><h1>Your moments, remixed<span>.</span></h1>
-    <p className="intro">Welcome, {profile?.first_name}. Your latest 30 generation attempts live here, including the exact prompt sent to AI.</p>
+    <p className="intro">Welcome, {profile?.first_name || "neighbor"}. Your latest 30 generation attempts live here, including the exact prompt sent to AI.</p>
     <Link href="/create" className="button">Create a caption →</Link>
     <section className="notebook-list" aria-label="Your generation history">
       {error ? <p className="notice" role="alert">Your notebook couldn’t load. Please try again later.</p> : !generations?.length ? <p className="notice">No moments yet. Start with a place and something that happened.</p> : generations.map(generation => {

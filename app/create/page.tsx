@@ -1,13 +1,11 @@
-import { redirect } from "next/navigation";
-import { requireAccount, isComplete } from "@/lib/profile";
+import { requireAccount } from "@/lib/profile";
 import { Navigation } from "@/components/navigation";
 import { CreateForm } from "@/components/create-form";
 
 export const maxDuration = 60;
 
 export default async function CreatePage() {
-  const { supabase, profile } = await requireAccount();
-  if (!isComplete(profile)) redirect("/profile");
+  const { supabase } = await requireAccount();
   const { error } = await supabase.from("generations").select("id").limit(1);
   const enabled = Boolean(process.env.GEMINI_API_KEY) && !error;
   return <main className="collection"><Navigation signedIn />
